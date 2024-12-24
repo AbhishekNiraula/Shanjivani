@@ -43,8 +43,8 @@ EMERGENCY_SIGNAL = "emergency/signal"
 client = mqtt.Client()
 
 # Twilio account credentials
-account_sid = 'ACa72adc5cdd59a11f2aa935f3c4ec5509'
-auth_token = 'b1fc212c56363e91d0d6b996c3cacd1a'
+account_sid = os.getenv('TWILIO_ACCOUNT_SID')
+auth_token = os.getenv('TWILIO_AUTH_TOKEN')
 twilio_client = Client(account_sid, auth_token)
 
 # Phone numbers
