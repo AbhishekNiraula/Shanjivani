@@ -1,0 +1,186 @@
+{% extends "base.html" %}
+
+{% block title %}Sanjeevani - Your Health Companion{% endblock %}
+
+{% block styles %}
+<style>
+	.pill {
+		position: fixed;
+		top: 0;
+		right: 0;
+		background-color: #333;
+		color: white;
+		padding: 0.5rem 1rem;
+		border-radius: 0.5rem 0 0 0;
+	}
+
+	.card {
+		background-color: white;
+		padding: 1rem;
+		margin: 1rem;
+		border-radius: 0.5rem;
+		box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+	}
+
+	.emergency-alert {
+		position: fixed;
+		bottom: 0;
+		left: 0;
+		right: 0;
+		background-color: red;
+		color: white;
+		padding: 1rem;
+		display: none;
+	}
+
+	.emergency-alert.show {
+		display: block;
+	}
+
+	.emergency-alert .alert {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+	}
+
+	.emergency-alert .alert button {
+		padding: 0.5rem 1rem;
+		background-color: white;
+		color: red;
+		border: 1px solid white;
+		border-radius: 0.5rem;
+		cursor: pointer;
+	}
+	</style>
+{% endblock %}
+
+{% block body %}
+
+<nav class="bg-white shadow-md fixed z-10 top-0 w-full">
+    <div class="flex justify-center px-5 py-3  w-full">
+        <div class="flex">
+            <a href="#" class="text-2xl font-bold text-blue-600 flex items-center rounded-xl">
+                <img src="{{ url_for('static', filename='images/logos/Horizon.svg') }}" 
+                     alt="Horizon Logo" 
+                     class="h-8 w-8 mr-2">Sanjeevani
+            </a>
+        </div>
+        <div class="flex justify-end mr-50 space-x-3 w-full">
+            <!-- <a href="{{url_for('login')}}" class="text-gray-700 hover:text-blue-600 transition duration-300 flex items-center">
+                <i data-feather="key" class="mr-1"></i>
+                Login
+            </a> -->
+            <a href="{{url_for('signup')}}" class="text-gray-700 hover:text-blue-600 transition duration-300 flex items-center">
+                <i data-feather="plus" class="mr-1"></i>
+                Sign Up
+            </a>
+        </div>
+    </div>
+</nav>
+
+<main class="mt-20 w-full px-3">
+    <section class="flex flex-col bg-white shadow-md rounded-lg p-6 text-center">
+        <h1 class="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-blue-900">Welcome {{username}} to Sanjeevani</h1>
+        <p class="text-gray-600 py-3">Your comprehensive health companion with Emergency Response Services.</p>
+    </section>
+    <section>
+
+		
+<header class="rounded-xl flex justify-center items-center bg-gradient-to-r from-cyan-100 to-blue-500">Real-Time Monitoring Dashboard</header>
+<div class="pill" id="mqtt-status">MQTT Connection: {{ 'Connected' if mqtt_connected else 'Disconnected' }}</div>
+<section>
+	<div class="card">
+		<h3>Distance Sensor</h3>
+		<p id="distance-status">Distance: Loading...</p>
+	</div>
+	<div class="card">
+		<h3>Air Quality</h3>
+		<p id="air-quality-status">Air Quality: Loading...</p>
+	</div>
+</section>
+
+<div class="emergency-alert" id="emergency-alert">
+	<div class="alert">
+		<i class="fas fa-exclamation-triangle" style="font-size: smaller;"></i> Emergency Triggered!
+		<p id="emergency-message"></p>
+		<button onclick="window.location.href = '/emergency'">View Details</button>
+		<button class="close-alert" onclick="document.getElementById('emergency-alert').style.display='none'">
+            <i class="fas fa-times" style="font-size: smaller;"></i>
+        </button>
+	</div>
+</div>
+        
+<div class="flex-1 p-10">
+    <div class="bg-white shadow-md rounded-lg p-8">
+        <h1 class="text-3xl font-bold mb-6 text-gray-800">Welcome to Sanjeevani</h1>
+        
+        <div class="grid grid-cols-3 gap-6">
+            <!-- SOS Emergency Card -->
+            <div class="bg-red-100 p-6 rounded-lg shadow-md col-span-2">
+                <h2 class="text-2xl font-semibold mb-4 text-red-800">SOS Emergency Services</h2>
+                <div class="space-y-4">
+                    <div class="bg-white p-4 rounded-lg shadow-sm flex items-center">
+                        <i data-feather="phone-call" class="mr-4 text-red-600 w-10 h-10"></i>
+                        <div>
+                            <h3 class="font-bold text-red-600">Emergency Call</h3>
+                            <p class="text-gray-700">Instant connection to emergency services</p>
+                        </div>
+                    </div>
+                    <div class="bg-white p-4 rounded-lg shadow-sm flex items-center">
+                        <i data-feather="map-pin" class="mr-4 text-orange-600 w-10 h-10"></i>
+                        <div>
+                            <h3 class="font-bold text-orange-600">Location Sharing</h3>
+                            <p class="text-gray-700">Share your precise location with emergency contacts</p>
+                        </div>
+                    </div>
+                    <div class="bg-white p-4 rounded-lg shadow-sm flex items-center">
+                        <i data-feather="users" class="mr-4 text-yellow-600 w-10 h-10"></i>
+                        <div>
+                            <h3 class="font-bold text-yellow-600">Emergency Contacts</h3>
+                            <p class="text-gray-700">Automatic notification to pre-set emergency contacts</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+                            <!-- Quick Health Cards -->
+                            <div class="space-y-6">
+                                <div class="bg-green-100 p-6 rounded-lg shadow-md">
+                                    <h2 class="text-xl font-semibold mb-4">Health Tracker</h2>
+                                    <p class="text-gray-600">Monitor your health progress</p>
+                                </div>
+                                <div class="bg-purple-100 p-6 rounded-lg shadow-md">
+                                    <h2 class="text-xl font-semibold mb-4">Medical Records</h2>
+                                    <p class="text-gray-600">Access your medical history</p>
+                                </div>
+                            </div>
+                        </div>
+            
+                        <!-- Emergency Contact Section -->
+                        <div class="mt-10 bg-gray-100 p-6 rounded-lg">
+                            <h2 class="text-2xl font-bold mb-4 text-red-700">Emergency Contacts</h2>
+                            <div class="grid grid-cols-3 gap-4">
+                                <div class="bg-white p-4 rounded-lg shadow-md">
+                                    <h3 class="font-bold text-red-600">Ambulance</h3>
+                                    <p class="text-gray-800">102</p>
+                                </div>
+                                <div class="bg-white p-4 rounded-lg shadow-md">
+                                    <h3 class="font-bold text-red-600">Police</h3>
+                                    <p class="text-gray-800">100</p>
+                                </div>
+                                <div class="bg-white p-4 rounded-lg shadow-md">
+                                    <h3 class="font-bold text-red-600">Fire Department</h3>
+                                    <p class="text-gray-800">101</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+</div>
+    </section>
+</main>
+
+
+    <script>
+
+		feather.replace();
+    </script>
+{% endblock %}

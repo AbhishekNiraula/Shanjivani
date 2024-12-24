@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Emergency Triggered</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #ffcccc;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+        }
+        header {
+            background-color: #f44336;
+            padding: 20px;
+            color: white;
+            font-size: 24px;
+        }
+        section {
+            margin: 20px;
+        }
+        .details {
+            font-size: 18px;
+            margin: 20px 0;
+        }
+        .timestamp {
+            font-size: 14px;
+            color: gray;
+        }
+        .back-link, .call-button {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 15px;
+            background-color: #f44336;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+        .call-button {
+            background-color: #4CAF50;
+        }
+		.whatsapp_button {
+			display: inline-block;
+			margin-top: 20px;
+			padding: 10px 15px;
+			background-color: #25D366;
+			color: white;
+			text-decoration: none;
+			border-radius: 5px;
+		}
+    </style>
+</head>
+<body>
+    <header>Emergency Alert</header>
+    <section>
+        <div class="details">
+            {% if button_emergency %}
+                <h2>Button Emergency</h2>
+                <div class="details">Emergency triggered by pressing the button!</div>
+            {% elif emergency_triggered %}
+                <h2>Ultrasonic Emergency</h2>
+                <div class="details">Emergency triggered by ultrasonic sensor!</div>
+            {% else %}
+                <h2>Emergency Triggered</h2>
+                <div class="details">Dispatch Service As Soon As Possible.</div>
+            {% endif %}
+        </div>
+        <div class="timestamp">Triggered at: {{ timestamp }}</div>
+        <a href="/" class="back-link">Back to Dashboard</a>
+        <a href="/trigger_call" class="call-button">Trigger Phone Call</a>
+		<a href="/trigger_message" class="whatsapp_button">Send a Whatsapp Message</a>
+    </section>
+</body>
+</html>

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sanjeevani - Your Health Companion</title>
+    <link rel="icon" type="images/x-icon" href="{{ url_for('static', filename='images/logos/Horizon.svg') }}">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/signup.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.5.4/socket.io.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+</head>
+<body class="bg-gray-100 font-sans flex flex-col">
+    {% block body %}
+
+    {% endblock %}
+
+<!-- Main Content Area -->
+<script>
+    feather.replace();
+
+	const socket = io();
+
+	socket.on('distance_update', (data) => {
+		document.getElementById('distance-status').textContent = `Distance: ${data.distance || 'N/A'} cm`;
+	});
+
+	socket.on('air_quality_update', (data) => {
+		document.getElementById('air-quality-status').textContent = `Air Quality: ${data.status || 'Unknown'}`;
+	});
+
+	socket.on('emergency_signal', (data) => {
+		document.getElementById('emergency-message').textContent = `Distance: ${data.distance || 'Uncofigured'} cm`;
+		document.getElementById('emergency-alert').classList.add('show');
+	});
+
+	socket.on('button_emergency', (data) => {
+		document.getElementById('emergency-message').textContent = `Button Emergency Triggered`;
+		document.getElementById('emergency-alert').classList.add('show');
+	});
+
+	socket.on('mqtt_status', (data) => {
+		document.getElementById('mqtt-status').textContent = `MQTT Connection: ${data.status}`;
+	});
+</script>
+</body>
+</html>
